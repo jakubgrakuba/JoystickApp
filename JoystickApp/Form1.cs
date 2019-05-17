@@ -75,7 +75,28 @@ namespace JoystickApp
 
             bool[] buttons = state.GetButtons();
 
-            if(id == 0)
+            for (int i = 0; i < 16; i++)
+            {
+                if(buttons[i])
+                    label1.Text = "button " + i.ToString()+ " " + buttons[i].ToString();
+            }
+            
+            //please set joystic in DInput mode
+            //buttons to linked from farmer
+            // wasd - kierowanie
+            //1 mouse - left click
+            //2 esc - options
+            //3 q - release 
+            //4 tab - tractor swith
+            //5 b - activate machine
+            //6 h - auto pilot
+            //7 i - map
+            //8 p - shop
+            //9 space horn
+            //10 accelerat
+            //11 brake
+
+            if (id == 0)
             {
                 if(buttons[0])
                 {
