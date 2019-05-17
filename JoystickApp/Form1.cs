@@ -93,11 +93,6 @@ namespace JoystickApp
                         MouseClicked = false;
                     }
                 }
-
-              //  if(buttons[1])
-              //  {
-              //      SendKeys.Send("{ESC}");
-              //  }
             }
         }
 
