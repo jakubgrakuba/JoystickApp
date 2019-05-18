@@ -30,6 +30,7 @@ namespace JoystickApp
         int yValue = 0;
         int xValue = 0;
         int zValue = 0;
+        int rzValue = 0;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern void mouse_event(uint flag, uint _x, uint _y, uint btn, uint exInfo);
@@ -71,7 +72,23 @@ namespace JoystickApp
             yValue = state.Y;
             xValue = state.X;
             zValue = state.Z;
-            MouseMove(xValue, yValue);
+            rzValue = state.RotationZ;
+            //MouseMove(xValue, yValue);
+            MouseMove(zValue, rzValue);
+
+            if(xValue < 0)
+                SendKeys.Send("a");
+            else if(xValue > 0)
+                SendKeys.Send("d");
+
+          //  if (yValue < 0)
+          //      SendKeys.Send("w");
+          //  else if (yValue > 0)
+          //      SendKeys.Send("s");
+
+            //Z = horizonatal, RotationZ = vertical
+            label2.Text = state.X.ToString();
+            label3.Text = state.Y.ToString();
 
             bool[] buttons = state.GetButtons();
 
@@ -98,7 +115,7 @@ namespace JoystickApp
 
             if (id == 0)
             {
-                if(buttons[0])
+                if(buttons[10])
                 {
                     if(MouseClicked == false)
                     {
