@@ -30,6 +30,7 @@ namespace JoystickApp
         int yValue = 0;
         int xValue = 0;
         int zValue = 0;
+        int rzValue = 0;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern void mouse_event(uint flag, uint _x, uint _y, uint btn, uint exInfo);
@@ -71,13 +72,50 @@ namespace JoystickApp
             yValue = state.Y;
             xValue = state.X;
             zValue = state.Z;
-            MouseMove(xValue, yValue);
+            rzValue = state.RotationZ;
+            //MouseMove(xValue, yValue);
+            MouseMove(zValue, rzValue);
+
+            if(xValue < 0)
+                SendKeys.Send("a");
+            else if(xValue > 0)
+                SendKeys.Send("d");
+
+          //  if (yValue < 0)
+          //      SendKeys.Send("w");
+          //  else if (yValue > 0)
+          //      SendKeys.Send("s");
+
+            //Z = horizonatal, RotationZ = vertical
+            label2.Text = state.X.ToString();
+            label3.Text = state.Y.ToString();
 
             bool[] buttons = state.GetButtons();
 
-            if(id == 0)
+            for (int i = 0; i < 16; i++)
             {
-                if(buttons[0])
+                if(buttons[i])
+                    label1.Text = "button " + i.ToString()+ " " + buttons[i].ToString();
+            }
+            
+            //please set joystic in DInput mode
+            //buttons to linked from farmer
+            // wasd - kierowanie
+            //1 mouse - left click
+            //2 esc - options
+            //3 q - release 
+            //4 tab - tractor swith
+            //5 b - activate machine
+            //6 h - auto pilot
+            //7 i - map
+            //8 p - shop
+            //9 space horn
+            //10 accelerat
+            //11 brake
+
+            if (id == 0)
+            {
+                if(buttons[10])
                 {
                     if(MouseClicked == false)
                     {
