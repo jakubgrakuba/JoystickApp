@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SlimDX.DirectInput;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace JoystickApp
 {
@@ -20,6 +21,13 @@ namespace JoystickApp
             GetSticks();
             Sticks = GetSticks();
             timer1.Enabled = true;
+
+            Thread th = Thread.CurrentThread;
+            th.Name = "MainThread";
+
+            ThreadStart childref = new ThreadStart(TurnRightOrLeft);
+            Thread childThread = new Thread(childref);
+            childThread.Start();
         }
 
         DirectInput Input = new DirectInput();
@@ -76,19 +84,30 @@ namespace JoystickApp
             //MouseMove(xValue, yValue);
             MouseMove(zValue, rzValue);
 
-            if(xValue < 0)
-                SendKeys.Send("a");
-            else if(xValue > 0)
-                SendKeys.Send("d");
+            TurnRightOrLeft();
+          //  if (xValue != 0 && !childThread.ThreadState.Equals(ThreadState.Running))
+          //  {
+          //      childThread.Start();
+          //  }
+          //  else
+          //  { 
+          //      childThread.Abort();
+          //  }
 
-          //  if (yValue < 0)
-          //      SendKeys.Send("w");
-          //  else if (yValue > 0)
-          //      SendKeys.Send("s");
+            // if(xValue < 0)
+            //     SendKeys.Send("a");
+            //  else if(xValue > 0)
+            //     SendKeys.Send("d");
+
+            //  if (yValue < 0)
+            //      SendKeys.Send("w");
+            //  else if (yValue > 0)
+            //      SendKeys.Send("s");
 
             //Z = horizonatal, RotationZ = vertical
             label2.Text = state.X.ToString();
             label3.Text = state.Y.ToString();
+            
 
             bool[] buttons = state.GetButtons();
 
@@ -132,13 +151,28 @@ namespace JoystickApp
                     }
                 }
 
-              //  if(buttons[1])
-              //  {
-              //      SendKeys.Send("{ESC}");
-              //  }
+                if(buttons[1])
+                {
+                 //   SendKeys.Send("{SPACE}");
+              }
             }
         }
 
+        public void TurnRightOrLeft()
+        {
+            // if (xValue < 0)
+            //     SendKeys.SendWait("a");
+            // else if (xValue > 0)
+            //     SendKeys.SendWait("d");
+            while (yValue < 0)
+            {
+                    SendKeys.SendWait("w");
+            }
+            while (yValue > 0)
+            {
+                SendKeys.SendWait("s");
+            }
+        }
         public void MouseMove(int posx, int posy)
         {
             Cursor.Position = new Point(Cursor.Position.X + posx/2, Cursor.Position.Y + posy/2);
@@ -150,7 +184,7 @@ namespace JoystickApp
             {
                 stickHandle(Sticks[i], i);
             }
-        }
+         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
